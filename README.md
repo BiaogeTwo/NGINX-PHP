@@ -1,4 +1,3 @@
-# NGINX-PHP
 ### 一、基本信息
 - 系统（L）：CentOS 6.9			#下载地址：[http://mirrors.sohu.com](http://mirrors.sohu.com)
 - Web服务器(N)：NGINX 1.14.0 		#下载地址：[http://nginx.org/en/download.html](http://nginx.org/en/download.html)
@@ -6,14 +5,14 @@
 - PHP-FPM服务器(P)：php-5.6.8.tar.gz	#下载地址：[http://mirrors.sohu.com/php/](http://mirrors.sohu.com/php/)
 - OPENSSL：openssl-1.0.2o.tar.gz	#下载地址：[https://www.openssl.org/source/](https://www.openssl.org/source/)
 
-######指定服务安装的通用位置
+###### 指定服务安装的通用位置
 mkdir /usr/local/services
 SERVICE_PATH=/usr/local/services
 
-######创建服务运行的账户
+###### 创建服务运行的账户
 useradd -r -M -s /sbin/nologin www
 
-######安装所需依赖包
+###### 安装所需依赖包
 yum -y install pcre pcre-devel \
 gperftools gcc zlib-devel \
 libxml2 libxml2-devel \
@@ -25,10 +24,10 @@ freetype freetype-devel \
 libmcrypt libmcrypt-devel \
 openssl-devel
 
-###二、软件安装配置
-######1、NGINX+OPENSSL安装
+### 二、软件安装配置
+###### 1、NGINX+OPENSSL安装
 
-######下载解压NGINX+OPENSSL
+###### 下载解压NGINX+OPENSSL
 NGINX_URL="http://nginx.org/download/nginx-1.14.0.tar.gz"
 OPENSSL_URL="https://www.openssl.org/source/openssl-1.1.0h.tar.gz"
 
@@ -36,7 +35,7 @@ wget -P ${SERVICE_PATH} ${NGINX_URL} && tar -zxvf  ${SERVICE_PATH}/nginx*.tar.gz
 wget -P ${SERVICE_PATH} ${OPENSSL_URL} && tar -zxvf ${SERVICE_PATH}/openssl*.gz -C ${SERVICE_PATH}
 
 
-######编译安装NGINX
+###### 编译安装NGINX
 cd ${SERVICE_PATH}/nginx-*;./configure \
 --prefix=${SERVICE_PATH}/nginx \
 --user=www --group=www \
@@ -60,93 +59,93 @@ cd ${SERVICE_PATH}/nginx-*;./configure \
 --without-http_memcached_module \
 --with-cc-opt='-O2' && cd ${SERVICE_PATH}/nginx-*;make && make install
 
-######NGINX+OPENSSL安装完成后的清理与其他配置
+###### NGINX+OPENSSL安装完成后的清理与其他配置
 ln -sv ${SERVICE_PATH}/nginx /usr/local/
 rm -rf ${SERVICE_PATH}/nginx/conf/*.default
 cd ${SERVICE_PATH} ; rm -rf nginx*.tar.gz openssl*.tar.gz
 
 
-######写入主配置文件nginx.conf（配置已优化）
+###### 写入主配置文件nginx.conf（配置已优化）
 ```
-	cat << EOF >/usr/local/nginx/conf/nginx.conf
-	user  www;
-	worker_processes  WORKERNUMBER;
-	worker_cpu_affinity auto;
-	worker_rlimit_nofile 655350;
-	
-	error_log  /var/log/nginx_error.log;
-	pid  /tmp/nginx.pid;
-	
-	google_perftools_profiles /tmp/tcmalloc;
-	
-	events {
-	    use epoll;
-	    worker_connections  655350;
-	    multi_accept on;
-	}
-	
-	http {
-	        charset  utf-8;
-	        include       mime.types;
-	        default_type  text/html;
-	
-	       log_format  main  '"\$remote_addr" - [\$time_local] "\$request" '
-	                                      '\$status $body_bytes_sent "\$http_referer" '
-	                                      '"\$http_user_agent" '
-	                                      '"\$sent_http_server_name \$upstream_response_time" '
-	                                      '\$request_time '
-	                                      '\$args';
-	
-	
-	        sendfile        on;
-	        tcp_nopush     on;
-	        tcp_nodelay on;
-	        keepalive_timeout  120;
-	        client_body_buffer_size 512k;
-	        client_header_buffer_size 64k;
-	        large_client_header_buffers 4 32k;
-	        client_max_body_size 300M;
-	        client_header_timeout 15s;
-	        client_body_timeout 50s;
-	        open_file_cache max=102400 inactive=20s;
-	        open_file_cache_valid 30s;
-	        open_file_cache_min_uses 1;
-	        server_names_hash_max_size 2048;
-	        server_names_hash_bucket_size 256;
-	        server_tokens off;
-	        gzip  on;
-	        gzip_proxied any;
-	        gzip_min_length  1024;
-	        gzip_buffers     4 8k;
-	        gzip_comp_level 9;
-	        gzip_disable "MSIE [1-6]\.";
-	        gzip_types application/json test/html text/plain text/css application/font-woff  application/pdf application/octet-stream application/x-javascript application/javascript application/xml text/javascript;
-	        fastcgi_cache_path /dev/shm/ levels=1:2 keys_zone=fastcgicache:512m inactive=10m max_size=3g;
-	        fastcgi_cache_lock on;
-	        fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
-	        fastcgi_send_timeout 300;
-	        fastcgi_connect_timeout 300;
-	        fastcgi_read_timeout 300;
-	        fastcgi_buffer_size 256k;
-	        fastcgi_buffers 4 128k;
-	        fastcgi_busy_buffers_size 256k;
-	        fastcgi_temp_file_write_size 256k;
-	
-	
-	        include vhost/*.conf;
-	}
-	EOF
+cat << EOF >/usr/local/nginx/conf/nginx.conf
+user  www;
+worker_processes  WORKERNUMBER;
+worker_cpu_affinity auto;
+worker_rlimit_nofile 655350;
+
+error_log  /var/log/nginx_error.log;
+pid  /tmp/nginx.pid;
+
+google_perftools_profiles /tmp/tcmalloc;
+
+events {
+    use epoll;
+    worker_connections  655350;
+    multi_accept on;
+}
+
+http {
+        charset  utf-8;
+        include       mime.types;
+        default_type  text/html;
+
+       log_format  main  '"\$remote_addr" - [\$time_local] "\$request" '
+                                      '\$status $body_bytes_sent "\$http_referer" '
+                                      '"\$http_user_agent" '
+                                      '"\$sent_http_server_name \$upstream_response_time" '
+                                      '\$request_time '
+                                      '\$args';
+
+
+        sendfile        on;
+        tcp_nopush     on;
+        tcp_nodelay on;
+        keepalive_timeout  120;
+        client_body_buffer_size 512k;
+        client_header_buffer_size 64k;
+        large_client_header_buffers 4 32k;
+        client_max_body_size 300M;
+        client_header_timeout 15s;
+        client_body_timeout 50s;
+        open_file_cache max=102400 inactive=20s;
+        open_file_cache_valid 30s;
+        open_file_cache_min_uses 1;
+        server_names_hash_max_size 2048;
+        server_names_hash_bucket_size 256;
+        server_tokens off;
+        gzip  on;
+        gzip_proxied any;
+        gzip_min_length  1024;
+        gzip_buffers     4 8k;
+        gzip_comp_level 9;
+        gzip_disable "MSIE [1-6]\.";
+        gzip_types application/json test/html text/plain text/css application/font-woff  application/pdf application/octet-stream application/x-javascript application/javascript application/xml text/javascript;
+        fastcgi_cache_path /dev/shm/ levels=1:2 keys_zone=fastcgicache:512m inactive=10m max_size=3g;
+        fastcgi_cache_lock on;
+        fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+        fastcgi_send_timeout 300;
+        fastcgi_connect_timeout 300;
+        fastcgi_read_timeout 300;
+        fastcgi_buffer_size 256k;
+        fastcgi_buffers 4 128k;
+        fastcgi_busy_buffers_size 256k;
+        fastcgi_temp_file_write_size 256k;
+
+
+        include vhost/*.conf;
+}
+EOF
 ···
-######NGINX worker进程数配置，指定为逻辑CPU数量的2倍
+###### NGINX worker进程数配置，指定为逻辑CPU数量的2倍
 THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 
-######2、PHP-FPM安装
-#下载并解压PHP-FPM软件
+###### 2、PHP-FPM安装
+# 下载并解压PHP-FPM软件
 FPM_URL="http://mirrors.sohu.com/php/php-5.6.8.tar.gz"
 wget -P ${SERVICE_PATH} ${FPM_URL} && tar -zxvf ${SERVICE_PATH}/php*.tar.gz -C ${SERVICE_PATH}
 
-#编译安装PHP-FPM
+# 编译安装PHP-FPM
 cd ${SERVICE_PATH}/php-*;./configure \
 --prefix=${SERVICE_PATH}/php  \
 --with-gd  \
@@ -190,14 +189,14 @@ cd ${SERVICE_PATH}/php-*;./configure \
 --with-gettext  \
 --disable-fileinfo  && cd ${SERVICE_PATH}/php-*;make && make install
 
-######若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
-######${SERVICE_PATH}/php/bin/pecl install mongo || exit
-######${SERVICE_PATH}/php/bin/pecl install redis || exit
+###### 若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
+###### ${SERVICE_PATH}/php/bin/pecl install mongo || exit
+###### ${SERVICE_PATH}/php/bin/pecl install redis || exit
 
-######安装完成后的配置清理
+###### 安装完成后的配置清理
 ln -sv ${SERVICE_PATH}/php /usr/local/
 
-######php.ini配置文件写入（配置已优化）
+###### php.ini配置文件写入（配置已优化）
 cat << EOF >${SERVICE_PATH}/php/php.ini 
 [PHP]
 engine = On
@@ -392,7 +391,7 @@ EOF
 
 
 
-######php-fpm.conf配置文件写入（配置已优化）
+###### php-fpm.conf配置文件写入（配置已优化）
 
 cat << EOF >${SERVICE_PATH}/php/etc/php-fpm.conf
 [global]
@@ -427,7 +426,7 @@ rlimit_files = 655350
 security.limit_extensions = .php
 EOF
 
-##三、基于以上配置PHP网站
+## 三、基于以上配置PHP网站
 `
 mkdir /usr/local/nginx/conf/vhost
 `
@@ -471,9 +470,9 @@ server
 }
 EOF
 
-#######若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
+####### 若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
 
-##四、启动服务
+## 四、启动服务
 `
 /usr/local/nginx/sbin/nginx
 `
