@@ -135,7 +135,7 @@ http {
         include vhost/*.conf;
 }
 EOF
-···
+```
 ###### NGINX worker进程数配置，指定为逻辑CPU数量的2倍
 THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
