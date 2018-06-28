@@ -150,12 +150,12 @@ THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 ```
 ###### 2、PHP-FPM安装
-# 下载并解压PHP-FPM软件
+####### 下载并解压PHP-FPM软件
 ```
 FPM_URL="http://mirrors.sohu.com/php/php-5.6.8.tar.gz"
 wget -P ${SERVICE_PATH} ${FPM_URL} && tar -zxvf ${SERVICE_PATH}/php*.tar.gz -C ${SERVICE_PATH}
 ```
-# 编译安装PHP-FPM
+##### 编译安装PHP-FPM
 ```
 cd ${SERVICE_PATH}/php-*;./configure \
 --prefix=${SERVICE_PATH}/php  \
@@ -440,7 +440,7 @@ rlimit_files = 655350
 security.limit_extensions = .php
 EOF
 ```
-## 三、基于以上配置PHP网站
+### 三、基于以上配置PHP网站
 `
 mkdir /usr/local/nginx/conf/vhost
 `
@@ -486,7 +486,7 @@ EOF
 ```
 ####### 若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
 
-## 四、启动服务
+### 四、启动服务
 `
 /usr/local/nginx/sbin/nginx
 `
