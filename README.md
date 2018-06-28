@@ -150,7 +150,7 @@ THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 ```
 ###### 2、PHP-FPM安装
-####### 下载并解压PHP-FPM软件
+###### 下载并解压PHP-FPM软件
 ```
 FPM_URL="http://mirrors.sohu.com/php/php-5.6.8.tar.gz"
 wget -P ${SERVICE_PATH} ${FPM_URL} && tar -zxvf ${SERVICE_PATH}/php*.tar.gz -C ${SERVICE_PATH}
