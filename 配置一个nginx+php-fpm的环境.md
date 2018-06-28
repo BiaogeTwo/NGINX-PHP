@@ -487,10 +487,17 @@ EOF
 ####### 若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
 
 ### 四、启动服务
-`
+###### 启动nginx和php-fpm
+```
 /usr/local/nginx/sbin/nginx
-`
-
-`
 /usr/local/php-fpm/sbin/php-fpm
-`
+```
+###### 命令其他选项
+nginx
+├── -s选项，向主进程发送信号
+|	├── reload参数，重新加载配置文件
+|	├── stop参数，快速停止nginx
+|	├── reopen参数，重新打开日志文件
+|	├── quit参数，Nginx在退出前完成已经接受的连接请求
+├── -t选项，检查配置文件是否正确
+├── -c选项，用于指定特定的配置文件并启动nginx
