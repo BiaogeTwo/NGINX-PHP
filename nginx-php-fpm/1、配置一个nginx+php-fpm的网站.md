@@ -28,7 +28,7 @@ libmcrypt libmcrypt-devel \
 openssl-devel
 ```
 ### 二、软件安装配置
-###### 1、NGINX+OPENSSL安装
+##### 1、NGINX+OPENSSL安装
 
 ###### 下载解压NGINX+OPENSSL
 ```
@@ -141,13 +141,13 @@ EOF
 THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 ```
-###### 2、PHP-FPM安装
+##### 2、PHP-FPM安装
 ###### 下载并解压PHP-FPM软件
 ```
 FPM_URL="http://mirrors.sohu.com/php/php-5.6.8.tar.gz"
 wget -P ${SERVICE_PATH} ${FPM_URL} && tar -zxvf ${SERVICE_PATH}/php*.tar.gz -C ${SERVICE_PATH}
 ```
-##### 编译安装PHP-FPM
+###### 编译安装PHP-FPM
 ```
 cd ${SERVICE_PATH}/php-*;./configure \
 --prefix=${SERVICE_PATH}/php  \
@@ -193,7 +193,7 @@ cd ${SERVICE_PATH}/php-*;./configure \
 --disable-fileinfo  && cd ${SERVICE_PATH}/php-*;make && make install
 ```
 
-##### 若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
+###### 若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
 ###### ${SERVICE_PATH}/php/bin/pecl install mongo || exit
 ###### ${SERVICE_PATH}/php/bin/pecl install redis || exit
 
