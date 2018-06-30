@@ -192,14 +192,11 @@ cd ${SERVICE_PATH}/php-*;./configure \
 --with-gettext  \
 --disable-fileinfo  && cd ${SERVICE_PATH}/php-*;make && make install
 ```
-###### 若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
+
+##### 若FPM程序有插件需求，如mongo或redis连接插件，则可通过pecl安装php相关插件
 ###### ${SERVICE_PATH}/php/bin/pecl install mongo || exit
 ###### ${SERVICE_PATH}/php/bin/pecl install redis || exit
 
-###### 安装完成后的配置清理
-`
-ln -sv ${SERVICE_PATH}/php /usr/local/
-`
 
 ###### php.ini配置文件写入（配置已优化）
 ```
@@ -487,7 +484,7 @@ ln -sv ${SERVICE_PATH}/nginx /usr/local/
 ln -sv ${SERVICE_PATH}/php /usr/local/
 ```
 
-### 四、启动服务
+### 五、启动服务
 ###### 生成php-fpm系统服务脚本，并加入开机启动项
 ```
 ln -sv ${SERVICE_PATH}/php-*/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
