@@ -476,7 +476,7 @@ EOF
 
 ### 四、安装完成后的清理与生成目录快捷方式
 ```
-cd ${SERVICE_PATH} ; rm -rf nginx*.tar.gz openssl*.tar.gz php*.tar.gz
+rm -rf ${SERVICE_PATH}/{nginx*.tar.gz,openssl*.tar.gz,php*.tar.gz}
 rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
 rm -rfv ${SERVICE_PATH}/php/etc/*.default
 
