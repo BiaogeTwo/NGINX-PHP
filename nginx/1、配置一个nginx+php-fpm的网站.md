@@ -409,7 +409,6 @@ EOF
 ```
 cat << EOF >${SERVICE_PATH}/php/etc/php-fpm.conf
 [global]
-pid = /tmp/php-fpm.pid
 error_log = /var/log/php-fpm-error.log
 log_level = warning
 process_control_timeout = 10
