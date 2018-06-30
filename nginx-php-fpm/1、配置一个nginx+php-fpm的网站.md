@@ -65,14 +65,6 @@ cd ${SERVICE_PATH}/nginx-*;./configure \
 --with-cc-opt='-O2' && cd ${SERVICE_PATH}/nginx-*;make && make install
 ```
 
-###### NGINX+OPENSSL安装完成后的清理与其他配置
-```
-ln -sv ${SERVICE_PATH}/nginx /usr/local/
-rm -rf ${SERVICE_PATH}/nginx/conf/*.default
-cd ${SERVICE_PATH} ; rm -rf nginx*.tar.gz openssl*.tar.gz
-```
-
-
 ###### 写入主配置文件nginx.conf（配置已优化）
 ```
 cat << EOF >/usr/local/nginx/conf/nginx.conf
@@ -485,11 +477,151 @@ EOF
 ```
 ####### 若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
 
-### 四、启动服务
-###### 启动nginx和php-fpm
+### 四、安装完成后的清理与生成目录快捷方式
 ```
-/usr/local/nginx/sbin/nginx
-/usr/local/php-fpm/sbin/php-fpm
+cd ${SERVICE_PATH} ; rm -rf nginx*.tar.gz openssl*.tar.gz php*.tar.gz
+rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
+rm -rfv ${SERVICE_PATH}/php/etc/*.default
+
+ln -sv ${SERVICE_PATH}/nginx /usr/local/
+ln -sv ${SERVICE_PATH}/php /usr/local/
+```
+
+### 四、启动服务
+###### 生成php-fpm系统服务脚本，并加入开机启动项
+```
+ln -sv ${SERVICE_PATH}/php-*/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+chmod a+x /etc/init.d/php-fpm
+chkconfig php-fpm --add && chkconfig php-fpm on
+```
+###### 生成nginx系统服务脚本，并加入开机启动项
+```
+cat << EOF > /etc/init.d/nginx
+#!/bin/bash
+#
+# nginx - this script starts and stops the nginx daemon
+#
+# chkconfig: - 85 15
+# description: Nginx is an HTTP(S) server, HTTP(S) reverse
+# proxy and IMAP/POP3 proxy server
+# processname: nginx
+# config: /etc/nginx/nginx.conf
+# config: /etc/sysconfig/nginx
+# pidfile: /var/run/nginx.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+#create temp dir in memory
+mkdir -p /dev/shm/nginx/fastcgi_temp/
+
+# Check that networking is up.
+[ "\$NETWORKING" = "no" ] && exit 0
+
+TENGINE_HOME="/usr/local/nginx/"
+nginx=\$TENGINE_HOME"sbin/nginx"
+prog=\$(basename \$nginx)
+
+NGINX_CONF_FILE=\$TENGINE_HOME"conf/nginx.conf"
+
+[ -f /etc/sysconfig/nginx ] && /etc/sysconfig/nginx
+
+lockfile=/var/lock/subsys/nginx
+
+start() {
+    [ -x \$nginx ] || exit 5
+    [ -f \$NGINX_CONF_FILE ] || exit 6
+    echo -n \$"Starting \$prog: "
+    daemon \$nginx -c \$NGINX_CONF_FILE
+    retval=\$?
+    echo
+    [ \$retval -eq 0 ] && touch \$lockfile
+    return \$retval
+}
+
+stop() {
+    echo -n \$"Stopping \$prog: "
+    killproc \$prog -QUIT
+    retval=\$?
+    echo
+    [ \$retval -eq 0 ] && rm -f \$lockfile
+    return \$retval
+    killall -9 nginx
+}
+
+restart() {
+    configtest || return \$?
+    stop
+    sleep 1
+    start
+}
+
+reload() {
+    configtest || return \$?
+    echo -n \$"Reloading \$prog: "
+    killproc \$nginx -HUP
+    RETVAL=\$?
+    echo
+}
+
+force_reload() {
+    restart
+}
+
+configtest() {
+    \$nginx -t -c \$NGINX_CONF_FILE
+}
+
+rh_status() {
+    status \$prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+case "\$1" in
+start)
+    rh_status_q && exit 0
+    \$1
+;;
+stop)
+    rh_status_q || exit 0
+    \$1
+;;
+restart|configtest)
+    \$1
+;;
+reload)
+    rh_status_q || exit 7
+        \$1
+;;
+force-reload)
+    force_reload
+;;
+status)
+    rh_status
+;;
+condrestart|try-restart)
+    rh_status_q || exit 0
+;;
+*)
+
+echo \$"Usage: \$0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}"
+exit 2
+esac
+EOF
+
+chmod a+x /etc/init.d/nginx
+chkconfig nginx --add && chkconfig nginx on
+```
+###### 启动服务
+```
+service nginx restart
+service php-fpm restart
 ```
 ###### 命令其他选项
 ```
