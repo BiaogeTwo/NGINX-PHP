@@ -49,7 +49,7 @@ cd ${SERVICE_PATH}/nginx-*;./configure \
 --with-http_flv_module \
 --with-pcre \
 --with-http_gzip_static_module \
---with-openssl=${SERVICE_PATH}/openssl* \
+--with-openssl=${SERVICE_PATH}/openssl-* \
 --with-http_realip_module \
 --with-google_perftools_module \
 --without-select_module \
