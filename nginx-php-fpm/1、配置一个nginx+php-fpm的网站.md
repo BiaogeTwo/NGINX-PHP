@@ -67,7 +67,7 @@ cd ${SERVICE_PATH}/nginx-*;./configure \
 
 ###### 写入主配置文件nginx.conf（配置已优化）
 ```
-cat << EOF >/usr/local/nginx/conf/nginx.conf
+cat << EOF >${SERVICE_PATH}/nginx/conf/nginx.conf
 user  www;
 worker_processes  WORKERNUMBER;
 worker_cpu_affinity auto;
