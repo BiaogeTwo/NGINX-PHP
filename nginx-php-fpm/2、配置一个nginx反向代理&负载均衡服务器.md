@@ -1,7 +1,7 @@
 ### 一、基本信息
 - 系统（L）：CentOS 6.9			#下载地址：[http://mirrors.sohu.com](http://mirrors.sohu.com)
 - 反代&负载均衡(N)：NGINX 1.14.0 		#下载地址：[http://nginx.org/en/download.html](http://nginx.org/en/download.html)
-- OPENSSL：openssl-1.0.2o.tar.gz	#下载地址：[https://www.openssl.org/source/](https://www.openssl.org/source/)
+- OPENSSL：openssl-1.1.0h	#下载地址：[https://www.openssl.org/source/](https://www.openssl.org/source/)
 
 ###### 指定服务安装的通用位置
 ```
