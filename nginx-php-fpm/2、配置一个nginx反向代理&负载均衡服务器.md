@@ -154,7 +154,6 @@ sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 ```
 rm -rf ${SERVICE_PATH}/{nginx*.tar.gz,openssl*.tar.gz}
 rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
-rm -rfv ${SERVICE_PATH}/php/etc/*.default
 
 ln -sv ${SERVICE_PATH}/nginx /usr/local/
 ```
