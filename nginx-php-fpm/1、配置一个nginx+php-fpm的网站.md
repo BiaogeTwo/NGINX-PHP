@@ -1,9 +1,9 @@
 ### 一、基本信息
-- 系统（L）：CentOS 6.9			#下载地址：[http://mirrors.sohu.com](http://mirrors.sohu.com)
-- Web服务器(N)：NGINX 1.14.0 		#下载地址：[http://nginx.org/en/download.html](http://nginx.org/en/download.html)
-- 数据库服务器(M)：MySQL 5.6.40	#下载地址：[https://dev.mysql.com/downloads/mysql](https://dev.mysql.com/downloads/mysql)
-- PHP-FPM服务器(P)：php-5.6.8     #下载地址：[http://mirrors.sohu.com/php/](http://mirrors.sohu.com/php/)
-- OPENSSL：openssl-1.1.0h	#下载地址：[https://www.openssl.org/source/](https://www.openssl.org/source/)
+- 系统（L）：CentOS 6.9			  #下载地址：[http://mirrors.sohu.com](http://mirrors.sohu.com)
+- Web服务器(N)：NGINX 1.14.0 	  	#下载地址：[http://nginx.org/en/download.html](http://nginx.org/en/download.html)
+- 数据库服务器(M)：MySQL 5.6.40	  #下载地址：[https://dev.mysql.com/downloads/mysql](https://dev.mysql.com/downloads/mysql)
+- PHP-FPM服务器(P)：php-5.6.8       #下载地址：[http://mirrors.sohu.com/php/](http://mirrors.sohu.com/php/)
+- OPENSSL：openssl-1.1.0h	  #下载地址：[https://www.openssl.org/source/](https://www.openssl.org/source/)
 
 ###### 指定服务安装的通用位置
 ```
