@@ -290,6 +290,7 @@ service nginx start
 
 ###### 六、配置一个负载均衡与反向代理
 ```
+mkdir ${SERVICE_PATH}/nginx/conf/vhost
 cat << EOF > ${SERVICE_PATH}/nginx/conf/vhost/erbiao.px.com.conf
 upstream api_php {
        server 172.25.10.127:80 max_fails=3 fail_timeout=30s;
@@ -305,7 +306,7 @@ server {
         location / {
                 proxy_pass http://api_php;
         }
-        access_log off main;
+        access_log off;
 }
 EOF
 ```
