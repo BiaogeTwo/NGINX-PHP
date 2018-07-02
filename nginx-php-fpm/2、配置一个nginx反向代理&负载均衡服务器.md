@@ -285,10 +285,36 @@ chkconfig nginx --add && chkconfig nginx on
 ```
 ###### 启动服务
 ```
+service nginx start
+```
+
+###### 六、配置一个负载均衡与反向代理
+```
+cat << EOF > ${SERVICE_PATH}/nginx/conf/vhost/erbiao.px.com.conf
+upstream api_php {
+       server 172.25.10.127:80 max_fails=3 fail_timeout=30s;
+       server 172.25.10.129:80 max_fails=3 fail_timeout=30s;
+       server 172.25.10.130:80 max_fails=3 fail_timeout=30s;
+       server 172.25.10.131:80 max_fails=3 fail_timeout=30s;
+       server 172.25.10.128:80 max_fails=3 fail_timeout=30s;
+}
+
+server {
+        listen 80;
+        server_name erbiao.px.com;
+        location / {
+                proxy_pass http://api_php;
+        }
+        access_log off main;
+}
+EOF
+```
+###### 重启服务
+```
 service nginx restart
 ```
 
-### 六、命令其他选项
+### 七、命令其他选项
 ```
 nginx
 ├── -s选项，向主进程发送信号
