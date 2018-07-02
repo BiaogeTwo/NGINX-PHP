@@ -150,7 +150,7 @@ THREAD=`expr $(grep process /proc/cpuinfo |wc -l) \* 2`
 sed -i s"/WORKERNUMBER/$THREAD/" ${SERVICE_PATH}/nginx/conf/nginx.conf
 ```
 
-###### 三、安装完成后的清理与生成目录快捷方式
+### 三、安装完成后的清理与生成目录快捷方式
 ```
 rm -rf ${SERVICE_PATH}/{nginx*.tar.gz,openssl*.tar.gz}
 rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
