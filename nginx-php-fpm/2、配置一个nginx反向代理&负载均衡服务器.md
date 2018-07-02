@@ -158,7 +158,7 @@ rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
 ln -sv ${SERVICE_PATH}/nginx /usr/local/
 ```
 
-### 五、启动服务
+### 四、启动服务
 ###### 生成nginx系统服务脚本，并加入开机启动项
 ```
 cat << EOF > /etc/init.d/nginx
@@ -288,7 +288,7 @@ chkconfig nginx --add && chkconfig nginx on
 service nginx start
 ```
 
-###### 六、配置一个负载均衡与反向代理
+###### 五、配置一个负载均衡与反向代理
 ```
 mkdir ${SERVICE_PATH}/nginx/conf/vhost
 cat << EOF > ${SERVICE_PATH}/nginx/conf/vhost/erbiao.px.com.conf
@@ -315,7 +315,7 @@ EOF
 service nginx restart
 ```
 
-### 七、命令其他选项
+### 六、命令其他选项
 ```
 nginx
 ├── -s选项，向主进程发送信号
