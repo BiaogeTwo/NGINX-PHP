@@ -429,10 +429,9 @@ security.limit_extensions = .php
 EOF
 ```
 ### 三、基于以上配置PHP网站
-`
-mkdir /usr/local/nginx/conf/vhost
-`
 ```
+mkdir /usr/local/nginx/conf/vhost
+
 cat << EOF > /usr/local/nginx/conf/vhost/erbiao.ex.com.conf
 server
         {
