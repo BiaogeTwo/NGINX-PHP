@@ -74,7 +74,7 @@ worker_cpu_affinity auto;
 worker_rlimit_nofile 655350;
 
 error_log  /var/log/nginx_error.log;
-pid  /tmp/nginx.pid;
+pid  /var/run/nginx.pid;
 
 google_perftools_profiles /tmp/tcmalloc;
 
@@ -428,7 +428,16 @@ rlimit_files = 655350
 security.limit_extensions = .php
 EOF
 ```
-### 三、基于以上配置PHP网站
+### 三、安装完成后的清理与生成目录快捷方式
+```
+rm -rfv ${SERVICE_PATH}/{nginx*.tar.gz,openssl*.tar.gz,php*.tar.gz}
+rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
+rm -rfv ${SERVICE_PATH}/php/etc/*.default
+
+ln -sv ${SERVICE_PATH}/nginx /usr/local/
+ln -sv ${SERVICE_PATH}/php /usr/local/
+```
+### 四、基于以上配置PHP网站
 ```
 mkdir /usr/local/nginx/conf/vhost
 
@@ -472,16 +481,6 @@ server
 EOF
 ```
 ####### 若在同一服务器运行nginx和php-fpm，并发量不超过1000，选择unix socket，如此可避免一些检查操作(路由等)，因此更快，更轻。若是高并发业务，则选择使用更可靠的tcp socket，以负载均衡、内核优化等运维手段维持效率
-
-### 四、安装完成后的清理与生成目录快捷方式
-```
-rm -rfv ${SERVICE_PATH}/{nginx*.tar.gz,openssl*.tar.gz,php*.tar.gz}
-rm -rfv ${SERVICE_PATH}/nginx/conf/*.default
-rm -rfv ${SERVICE_PATH}/php/etc/*.default
-
-ln -sv ${SERVICE_PATH}/nginx /usr/local/
-ln -sv ${SERVICE_PATH}/php /usr/local/
-```
 
 ### 五、启动服务
 ###### 生成php-fpm系统服务脚本，并加入开机启动项
