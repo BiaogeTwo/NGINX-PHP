@@ -450,6 +450,13 @@ server
                 root  /www/web/;
                 access_log off;
                 add_header Server-Name WEBerbiaoEX;
+                
+                location / {
+                if (!-e \$request_filename) {
+                     rewrite  ^(.*)$  /index.php?s=\$1 last;
+                break;
+           }
+}
 
                 location ~ \.php {
                    fastcgi_pass  unix:/dev/shm/php-fpm.sock;
