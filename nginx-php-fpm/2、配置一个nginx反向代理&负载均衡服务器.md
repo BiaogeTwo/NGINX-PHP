@@ -66,7 +66,7 @@ worker_processes  WORKERNUMBER;
 worker_cpu_affinity auto;
 worker_rlimit_nofile 655350;
 error_log  /var/log/nginx_error.log;
-pid        /tmp/nginx.pid;
+pid        /var/run/nginx.pid;
 
 google_perftools_profiles /tmp/tcmalloc;
 
